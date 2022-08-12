@@ -24,6 +24,23 @@ class UsersHandler {
     response.code(201);
     return response;
   }
+
+  async getSecretHandler(request, h) {
+    const { userId: userId, role: role } = request.auth.credentials;
+
+    const response = h.response({
+      status: "success",
+      message: "Get private data success",
+      data: {
+        userId,
+        role,
+      },
+    });
+
+    response.code(200);
+
+    return response;
+  }
 }
 
 module.exports = UsersHandler;

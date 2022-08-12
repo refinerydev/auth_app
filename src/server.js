@@ -1,6 +1,7 @@
 require("dotenv").config();
 
 const Hapi = require("@hapi/hapi");
+const Jwt = require("@hapi/jwt");
 
 const users = require("./api/users");
 const UsersService = require("./service/UsersService");
@@ -44,6 +45,29 @@ const init = async () => {
     }
 
     return response.continue || response;
+  });
+
+  await server.register([
+    {
+      plugin: Jwt,
+    },
+  ]);
+
+  server.auth.strategy("auth_app_jwt", "jwt", {
+    keys: process.env.JWT_KEY_SECRET,
+    verify: {
+      aud: false,
+      iss: false,
+      sub: false,
+      maxAgeSec: process.env.JWT_TOKEN_AGE,
+    },
+    validate: (artifacts) => ({
+      isValid: true,
+      credentials: {
+        userId: artifacts.decoded.payload.userId,
+        role: artifacts.decoded.payload.role,
+      },
+    }),
   });
 
   await server.register([
