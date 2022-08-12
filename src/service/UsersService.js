@@ -1,5 +1,6 @@
 const { nanoid } = require("nanoid");
 const generator = require("generate-password");
+const InvariantError = require("../exception/InvariantError");
 
 class UsersService {
   constructor() {
@@ -28,7 +29,7 @@ class UsersService {
     const isSuccess = user.length > 0;
 
     if (!isSuccess) {
-      throw new Error("Registration failed");
+      throw new InvariantError("Registration failed");
     }
 
     return user[0];

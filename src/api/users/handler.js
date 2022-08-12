@@ -1,35 +1,28 @@
 class UsersHandler {
-  constructor(service) {
+  constructor(service, validator) {
     this._service = service;
+    this._validator = validator;
 
     this.postUserHandler = this.postUserHandler.bind(this);
   }
 
   async postUserHandler(request, h) {
-    try {
-      const { nik, role } = request.payload;
+    this._validator.validateUserPayload(request.payload);
 
-      const user = await this._service.addUser({ nik, role });
+    const { nik, role } = request.payload;
 
-      const response = h.response({
-        status: "success",
-        message: "Registration success",
-        data: {
-          user,
-        },
-      });
+    const user = await this._service.addUser({ nik, role });
 
-      response.code(201);
-      return response;
-    } catch (error) {
-      const response = h.response({
-        status: "fail",
-        message: error.message,
-      });
+    const response = h.response({
+      status: "success",
+      message: "Registration success",
+      data: {
+        user,
+      },
+    });
 
-      response.code(500);
-      return response;
-    }
+    response.code(201);
+    return response;
   }
 }
 
