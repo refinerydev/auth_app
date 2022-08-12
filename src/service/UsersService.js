@@ -31,7 +31,7 @@ class UsersService {
       throw new Error("Registration failed");
     }
 
-    return user;
+    return user[0];
   }
 }
 
