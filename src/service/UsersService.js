@@ -1,6 +1,6 @@
 const { nanoid } = require("nanoid");
 const generator = require("generate-password");
-const InvariantError = require("../exception/InvariantError");
+const AuthenticationError = require("../exception/AuthenticationError");
 
 class UsersService {
   constructor() {
@@ -33,6 +33,22 @@ class UsersService {
     }
 
     return user[0];
+  }
+
+  async verifyUserCredential(nik, password) {
+    const result = this._users.filter((user) => user.nik === nik);
+
+    const isFound = result.length > 0;
+
+    if (!isFound) {
+      throw new AuthenticationError("Invalid credentials");
+    }
+
+    if (password !== result[0].password) {
+      throw new AuthenticationError("Invalid credentials");
+    }
+
+    return result[0];
   }
 }
 

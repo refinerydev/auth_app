@@ -6,6 +6,10 @@ const users = require("./api/users");
 const UsersService = require("./service/UsersService");
 const UsersValidator = require("./validator/users");
 
+const authentications = require("./api/authentications");
+const TokenManager = require("./tokenize/TokenManager");
+const AuthenticationsValidator = require("./validator/authentications");
+
 const ClientError = require("./exception/ClientError");
 
 const init = async () => {
@@ -48,6 +52,14 @@ const init = async () => {
       options: {
         service: usersService,
         validator: UsersValidator,
+      },
+    },
+    {
+      plugin: authentications,
+      options: {
+        usersService,
+        tokenManager: TokenManager,
+        validator: AuthenticationsValidator,
       },
     },
   ]);
