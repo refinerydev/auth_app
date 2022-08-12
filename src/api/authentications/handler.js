@@ -15,8 +15,12 @@ class AuthenticationsHandler {
     const user = await this._usersService.verifyUserCredential(nik, password);
 
     const userId = user.id;
+    const role = user.role;
 
-    const accessToken = this._tokenManager.generateAccessToken({ userId });
+    const accessToken = this._tokenManager.generateAccessToken({
+      userId,
+      role,
+    });
 
     user.accessToken = accessToken;
 
